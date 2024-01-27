@@ -1,0 +1,13 @@
+dist: focal
+
+services:
+  - docker
+
+before_install:
+  - curl -L -o /tmp/podman.deb https://github.com/containers/libpod/releases/download/v1.6.4/podman_1.6.4-1_amd64.deb
+  - sudo dpkg -i /tmp/podman.deb
+
+script:
+  - podman pull alpine
+  - podman run alpine echo "Hello World"
+  - podman images
