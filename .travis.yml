@@ -1,25 +1,11 @@
-language: c
-
-env:
-  - NATIVE_GOOS=linux NATIVE_GOARCH=amd64
+language: minimal
 
 services:
   - docker
 
 before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
-  - sudo apt-get install -y docker-ce make
+  - sudo apt-get -y install podman
 
-jobs:
-  include:
-    - name: Podman tests
-      script:
-        - docker run -d --name ubuntu ubuntu:22.04 sleep infinity    
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt update
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt install -y git build-essential golang-go libseccomp-dev pkg-config libsystemd-dev libgpgme-dev
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu git clone https://github.com/containers/podman
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman podman
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman install
-install: skip
+script:
+  - podman --version
