@@ -22,6 +22,7 @@ jobs:
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt install -y git
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu bash -c "apt update && apt install -y git build-essential"
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu git clone https://github.com/containers/podman
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt install -y golang-go
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman install
 install: skip
