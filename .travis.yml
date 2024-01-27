@@ -1,5 +1,5 @@
-dist: bionic
-language: shell 
+dist: jammy
+language: shell
 
 services:
   - docker
@@ -8,11 +8,11 @@ before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
-  - sudo apt-get -y install docker-ce
-  
+  - sudo apt-get install -y docker-ce
+
 jobs:
   include:
-    - name: Podman Test
+    - name: Podman tests
       script:
         - sudo docker run -d --privileged --name ubuntu ubuntu:22.04 sleep infinity
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt update
@@ -20,5 +20,3 @@ jobs:
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin /bin/bash -c "git clone https://github.com/containers/podman && cd podman && make && make install"
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman pull alpine
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman run alpine echo Hello Podman!
-  install: skip 
-
