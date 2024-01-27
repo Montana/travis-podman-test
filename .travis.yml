@@ -4,8 +4,12 @@ services:
   - docker
 
 before_install:
-  - curl -L -o /tmp/podman.deb https://github.com/containers/libpod/releases/download/v3.0.1/podman_3.0.1-1_amd64.deb
-  - sudo dpkg -i /tmp/podman.deb
+  - curl -L -o podman.rpm https://github.com/containers/podman/releases/download/v3.0.1/podman-3.0.1-1.module+el8+5104+7533c09d.x86_64.rpm
+  - sudo rpm -i ./podman.rpm
+  - git clone https://github.com/containers/podman
+  - cd podman
+  - make
+  - make install
 
 script:
   - podman pull alpine
