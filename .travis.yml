@@ -4,7 +4,10 @@ services:
   - docker
 
 before_install:
-  - sudo apt-get update
+  - sudo apt-get update -y
+  - sudo apt-get install -y software-properties-common
+  - sudo add-apt-repository -y ppa:projectatomic/ppa
+  - sudo apt-get update -y
   - sudo apt-get -y install podman
 
 script:
