@@ -1,4 +1,3 @@
-dist: bionic
 language: c
 
 env:
@@ -19,8 +18,8 @@ jobs:
       script:
         - docker run -d --name ubuntu ubuntu:22.04 sleep infinity    
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt update
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt install -y git build-essential golang-go libseccomp-dev pkg-config libsystemd-dev
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt install -y git build-essential golang-go libseccomp-dev pkg-config libsystemd-dev libgpgme-dev
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu git clone https://github.com/containers/podman
-        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman podman
         - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman install
 install: skip
