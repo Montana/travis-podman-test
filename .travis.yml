@@ -4,17 +4,17 @@ services:
   - docker
 
 before_install:
-  - curl -L -o podman.rpm https://github.com/containers/podman/releases/download/v3.0.1/podman-3.0.1-1.module+el8+5104+7533c09d.x86_64.rpm
-  - sudo rpm -i ./podman.rpm
-  - git clone https://github.com/containers/podman
-  - cd podman
-  - make
-  - make install
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
 
-script:
-  - podman pull alpine
-  - podman run alpine echo "Hello World"
-  - podman images
-
-after_script:
-  - podman image prune -a -f
+jobs:
+  include:
+    - name: Podman Test
+      script:
+        - sudo docker run -d --privileged --name ubuntu -v /sys/fs/cgroup:/sys/fs/cgroup:rw ubuntu:20.04 /sbin/init
+        - sudo docker exec ubuntu apt-get update 
+        - sudo docker exec ubuntu apt-get install -y podman
+        - sudo docker exec ubuntu podman pull alpine 
+        - sudo docker exec ubuntu podman run alpine echo Hello Podman!
