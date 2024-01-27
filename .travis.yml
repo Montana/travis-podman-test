@@ -1,5 +1,8 @@
 dist: bionic
-language: shell
+language: c 
+
+env:
+  - NATIVE_GOOS=linux NATIVE_GOARCH=amd64
 
 services:
   - docker
@@ -8,16 +11,15 @@ before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
-  - sudo apt-get install -y docker-ce
+  - sudo apt-get install -y docker-ce make
 
 jobs:
   include:
     - name: Podman tests
       script:
-        - sudo docker run -d --privileged --name ubuntu ubuntu:22.04 sleep infinity
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt update
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu bash -c "apt update && apt install -y git build-essential"
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu /usr/bin/bash -c "git clone https://github.com/containers/podman && cd podman && make && make install"
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman pull alpine
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman run alpine echo Hello Podman!
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt update
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu apt install -y git
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu git clone https://github.com/containers/podman
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman
+        - docker exec -e NATIVE_GOOS -e NATIVE_GOARCH ubuntu make -C podman install
 install: skip
