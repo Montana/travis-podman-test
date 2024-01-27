@@ -16,7 +16,8 @@ jobs:
       script:
         - sudo docker run -d --privileged --name ubuntu ubuntu:22.04 sleep infinity
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt update
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt install -y git build-essential
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin /bin/bash -c "git clone https://github.com/containers/podman && cd podman && make && make install"
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu bash -c "apt update && apt install -y git build-essential"
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu /usr/bin/bash -c "git clone https://github.com/containers/podman && cd podman && make && make install"
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman pull alpine
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman run alpine echo Hello Podman!
+install: skip
