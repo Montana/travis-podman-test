@@ -12,3 +12,5 @@ before_install:
 
 script:
   - podman --version
+  - podman info
+  - podman search datadog 
