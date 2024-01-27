@@ -13,13 +13,12 @@ jobs:
   include:
     - name: Podman Test
       script:
-        - sudo docker exec ubuntu add-apt-repository ppa:projectatomic/ppa
-        - sudo docker exec ubuntu apt update
-        - sudo docker exec ubuntu apt install podman
-        - sudo docker run -d --privileged --name ubuntu -v /sys/fs/cgroup:/sys/fs/cgroup:rw ubuntu:20.04 sleep infinity
-        - sudo docker exec ubuntu apt-get update 
-        - sudo docker exec ubuntu apt-get install -y podman
-        - sudo docker exec ubuntu podman pull alpine 
-        - sudo docker exec ubuntu podman run alpine echo Hello Podman!
+        - sudo docker run -d --privileged --name ubuntu ubuntu:22.04 sleep infinity 
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt update
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt install -y git build-essential 
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu git clone https://github.com/containers/podman  
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu cd podman/ && make && make install
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman pull alpine
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman run alpine echo Hello Podman!
   install: skip 
 
