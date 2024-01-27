@@ -1,4 +1,5 @@
 dist: bionic
+language: shell 
 
 services:
   - docker
@@ -13,11 +14,10 @@ jobs:
   include:
     - name: Podman Test
       script:
-        - sudo docker run -d --privileged --name ubuntu ubuntu:22.04 sleep infinity 
+        - sudo docker run -d --privileged --name ubuntu ubuntu:22.04 sleep infinity
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt update
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt install -y git build-essential 
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu git clone https://github.com/containers/podman  
-        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu cd podman/ && make && make install
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu apt install -y git build-essential
+        - sudo docker exec -e PATH=$PATH:/usr/local/sbin /bin/bash -c "git clone https://github.com/containers/podman && cd podman && make && make install"
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman pull alpine
         - sudo docker exec -e PATH=$PATH:/usr/local/sbin ubuntu podman run alpine echo Hello Podman!
   install: skip 
